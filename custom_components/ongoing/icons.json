@@ -15,6 +15,9 @@
       "due_date": {
         "default": "mdi:calendar"
       },
+      "due_in": {
+        "default": "mdi:calendar-clock"
+      },
       "next_due": {
         "default": "mdi:calendar-arrow-right"
       },

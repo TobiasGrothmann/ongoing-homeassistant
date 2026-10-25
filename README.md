@@ -56,6 +56,7 @@ device can be assigned to an area like any other device.
 |---|---|
 | `binary_sensor.<note>` | on when the note is due today or earlier |
 | `sensor.<note>_due_date` | the day it is due |
+| `sensor.<note>_due_in` | calendar days until due, negative once overdue |
 
 The binary sensor's attributes carry the rest: `content`, `recurring`,
 `interval`, `interval_number`, `interval_unit`, `due`, `days_until_due`

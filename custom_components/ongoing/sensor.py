@@ -13,6 +13,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
+from homeassistant.const import UnitOfTime
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import StateType
@@ -87,7 +88,12 @@ async def async_setup_entry(
         new = current - known
         if new:
             async_add_entities(
-                OngoingNoteDueDate(coordinator, note_id) for note_id in new
+                entity
+                for note_id in new
+                for entity in (
+                    OngoingNoteDueDate(coordinator, note_id),
+                    OngoingNoteDueIn(coordinator, note_id),
+                )
             )
             known.update(new)
 
@@ -148,3 +154,24 @@ class OngoingNoteDueDate(OngoingNoteEntity, SensorEntity):
     def native_value(self) -> date:
         """Return the due date."""
         return self.note.due
+
+
+class OngoingNoteDueIn(OngoingNoteEntity, SensorEntity):
+    """Calendar days until a note is due; negative once it is overdue."""
+
+    _attr_translation_key = "due_in"
+    _attr_device_class = SensorDeviceClass.DURATION
+    _attr_native_unit_of_measurement = UnitOfTime.DAYS
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_suggested_display_precision = 0
+
+    def __init__(self, coordinator: OngoingCoordinator, note_id: str) -> None:
+        """Initialize the due-in sensor."""
+        super().__init__(coordinator, note_id)
+        self._attr_unique_id = f"{note_id}_due_in"
+
+    @property
+    @override
+    def native_value(self) -> int:
+        """Return the days until due."""
+        return self.note.days_until_due(self.coordinator.today())
