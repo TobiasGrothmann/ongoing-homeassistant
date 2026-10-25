@@ -1,0 +1,43 @@
+{
+  "group": {
+    "key": "11111111-2222-4333-8444-555555555555",
+    "name": "Haushalt"
+  },
+  "notes": [
+    {
+      "id": "note-tax",
+      "content": "File taxes",
+      "due": "2026-11-30",
+      "lastDone": null,
+      "isRecurring": false,
+      "durationType": "months",
+      "durationNumber": 12,
+      "nextVariant": ""
+    },
+    {
+      "id": "note-bins",
+      "content": "Take out the bins",
+      "due": "2026-10-25",
+      "lastDone": null,
+      "isRecurring": true,
+      "durationType": "days",
+      "durationNumber": 14,
+      "nextVariant": "Paper"
+    },
+    {
+      "id": "note-plants",
+      "content": "Water the plants",
+      "due": "2026-10-23",
+      "lastDone": "2026-10-16T08:00:00.000",
+      "isRecurring": true,
+      "durationType": "weeks",
+      "durationNumber": 1,
+      "nextVariant": ""
+    },
+    {
+      "id": "note-broken",
+      "content": "No due date"
+    }
+  ],
+  "serverTime": "2026-10-25T10:00:00.000Z"
+}

@@ -1,0 +1,23 @@
+{
+  "entity": {
+    "sensor": {
+      "due": {
+        "default": "mdi:calendar-today"
+      },
+      "overdue": {
+        "default": "mdi:calendar-alert"
+      },
+      "next_due": {
+        "default": "mdi:calendar-arrow-right"
+      },
+      "notes": {
+        "default": "mdi:repeat"
+      }
+    },
+    "todo": {
+      "notes": {
+        "default": "mdi:repeat"
+      }
+    }
+  }
+}

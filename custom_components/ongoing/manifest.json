@@ -1,0 +1,14 @@
+{
+  "domain": "ongoing",
+  "name": "Ongoing",
+  "codeowners": [
+    "@TobiasGrothmann"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/TobiasGrothmann/ongoing-homeassistant",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/TobiasGrothmann/ongoing-homeassistant/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

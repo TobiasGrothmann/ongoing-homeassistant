@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect a shared list",
+        "description": "Enter the group key of a shared list. In the Ongoing app, open Sharing and copy the key of the list.",
+        "data": {
+          "group_key": "Group key"
+        },
+        "data_description": {
+          "group_key": "Looks like {example_key}. Anyone who has it can read and edit the list."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect",
+      "invalid_auth": "No list with this group key",
+      "invalid_key": "A group key looks like {example_key}",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This list is already configured",
+      "reauth_successful": "Re-authentication was successful",
+      "reconfigure_successful": "Re-configuration was successful"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "due": {
+        "name": "Due"
+      },
+      "overdue": {
+        "name": "Overdue"
+      },
+      "next_due": {
+        "name": "Next due"
+      },
+      "notes": {
+        "name": "Notes"
+      }
+    },
+    "todo": {
+      "notes": {
+        "name": "Notes"
+      }
+    }
+  },
+  "exceptions": {
+    "authentication_error": {
+      "message": "The Ongoing endpoint does not know this group key. Was the list deleted?"
+    },
+    "update_error": {
+      "message": "An error occurred while reading the list: {error}"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Geteilte Liste verbinden",
+        "description": "Gib den Gruppenschlüssel einer geteilten Liste ein. In der Ongoing-App unter Teilen den Schlüssel der Liste kopieren.",
+        "data": {
+          "group_key": "Gruppenschlüssel"
+        },
+        "data_description": {
+          "group_key": "Sieht aus wie {example_key}. Wer ihn hat, kann die Liste lesen und bearbeiten."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung fehlgeschlagen",
+      "invalid_auth": "Keine Liste mit diesem Gruppenschlüssel",
+      "invalid_key": "Ein Gruppenschlüssel sieht aus wie {example_key}",
+      "unknown": "Unerwarteter Fehler"
+    },
+    "abort": {
+      "already_configured": "Diese Liste ist bereits eingerichtet",
+      "reauth_successful": "Erneute Anmeldung erfolgreich",
+      "reconfigure_successful": "Neukonfiguration erfolgreich"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "due": {
+        "name": "Fällig"
+      },
+      "overdue": {
+        "name": "Überfällig"
+      },
+      "next_due": {
+        "name": "Nächste Fälligkeit"
+      },
+      "notes": {
+        "name": "Einträge"
+      }
+    },
+    "todo": {
+      "notes": {
+        "name": "Einträge"
+      }
+    }
+  },
+  "exceptions": {
+    "authentication_error": {
+      "message": "Der Ongoing-Endpunkt kennt diesen Gruppenschlüssel nicht. Wurde die Liste gelöscht?"
+    },
+    "update_error": {
+      "message": "Fehler beim Lesen der Liste: {error}"
+    }
+  }
+}

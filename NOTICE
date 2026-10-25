@@ -1,0 +1,16 @@
+Ongoing for Home Assistant
+Copyright (C) 2026 Tobias Grothmann
+
+This project is licensed under the GNU General Public License v3.0 or later
+(see LICENSE).
+
+The coordinator/entity structure follows the pattern of the integrations that
+ship with Home Assistant Core (https://github.com/home-assistant/core),
+licensed under the Apache License, Version 2.0
+(http://www.apache.org/licenses/LICENSE-2.0).
+
+Ongoing (https://github.com/TobiasGrothmann/ongoing) is the Android app whose
+shared lists this integration reads. No app code is included.
+
+The code was written with Claude Code (Anthropic) under the direction of the
+copyright holder, who reviewed and tested it.
