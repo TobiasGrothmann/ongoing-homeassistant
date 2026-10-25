@@ -58,6 +58,8 @@ async def test_note_entities(
     assert hass.states.get("sensor.water_the_plants_due_date").state == "2026-10-23"
     assert hass.states.get("sensor.water_the_plants_due_in").state == "-2"
     assert hass.states.get("sensor.file_taxes_due_in").state == "36"
+    assert hass.states.get("sensor.water_the_plants_last_done").state == "2026-10-16"
+    assert hass.states.get("sensor.file_taxes_last_done").state == "unknown"
 
     device = device_registry.async_get_device_by_identifier(
         (DOMAIN, "note-plants"), mock_config_entry.entry_id
@@ -91,6 +93,7 @@ async def test_note_removed_and_added(
     assert hass.states.get("binary_sensor.water_the_plants") is None
     assert hass.states.get("sensor.water_the_plants_due_date") is None
     assert hass.states.get("sensor.water_the_plants_due_in") is None
+    assert hass.states.get("sensor.water_the_plants_last_done") is None
     assert (
         device_registry.async_get_device_by_identifier(
             (DOMAIN, "note-plants"), mock_config_entry.entry_id

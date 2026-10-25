@@ -37,6 +37,9 @@
       "due_date": {
         "name": "Due date"
       },
+      "last_done": {
+        "name": "Last done"
+      },
       "due_in": {
         "name": "Due in"
       },

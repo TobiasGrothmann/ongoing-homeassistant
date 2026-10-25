@@ -37,6 +37,9 @@
       "due_date": {
         "name": "Fälligkeitsdatum"
       },
+      "last_done": {
+        "name": "Zuletzt erledigt"
+      },
       "due_in": {
         "name": "Fällig in"
       },

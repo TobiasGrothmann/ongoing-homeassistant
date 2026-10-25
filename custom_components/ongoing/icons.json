@@ -18,6 +18,9 @@
       "due_in": {
         "default": "mdi:calendar-clock"
       },
+      "last_done": {
+        "default": "mdi:calendar-check-outline"
+      },
       "next_due": {
         "default": "mdi:calendar-arrow-right"
       },

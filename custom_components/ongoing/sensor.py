@@ -93,6 +93,7 @@ async def async_setup_entry(
                 for entity in (
                     OngoingNoteDueDate(coordinator, note_id),
                     OngoingNoteDueIn(coordinator, note_id),
+                    OngoingNoteLastDone(coordinator, note_id),
                 )
             )
             known.update(new)
@@ -175,3 +176,22 @@ class OngoingNoteDueIn(OngoingNoteEntity, SensorEntity):
     def native_value(self) -> int:
         """Return the days until due."""
         return self.note.days_until_due(self.coordinator.today())
+
+
+class OngoingNoteLastDone(OngoingNoteEntity, SensorEntity):
+    """The day a note was last marked done; unknown until the first time."""
+
+    _attr_translation_key = "last_done"
+    _attr_device_class = SensorDeviceClass.DATE
+
+    def __init__(self, coordinator: OngoingCoordinator, note_id: str) -> None:
+        """Initialize the last-done sensor."""
+        super().__init__(coordinator, note_id)
+        self._attr_unique_id = f"{note_id}_last_done"
+
+    @property
+    @override
+    def native_value(self) -> date | None:
+        """Return the day the note was last done."""
+        last_done = self.note.last_done
+        return last_done.date() if last_done else None
