@@ -40,14 +40,14 @@ Copy the skeleton from the TRMNL repo (`pyproject.toml`, `hacs.json`, `scripts/d
 ```
 custom_components/ongoing/
   manifest.json      domain "ongoing", iot_class cloud_polling, integration_type service, requirements []
-  const.py           DOMAIN, DEFAULT_SCAN_INTERVAL=2 min, ENDPOINT_URL, CONF_GROUP_KEY
+  const.py           DOMAIN, DEFAULT_SCAN_INTERVAL=3:30 (Firestore read budget), ENDPOINT_URL, CONF_GROUP_KEY
   api.py             OngoingClient(session, group_key): async fetch() -> GroupData; errors: OngoingAuthError (401/404), OngoingError
   coordinator.py     DataUpdateCoordinator[GroupData]; UpdateFailed on OngoingError, ConfigEntryAuthFailed on 404 (group gone)
   config_flow.py     step user: group key (TextSelector, password type); validates by calling fetch(); unique_id = group key; title = group name. Reauth/reconfigure: re-enter key.
   __init__.py        setup/unload, PLATFORMS = [todo, sensor]
   entity.py          base entity with DeviceInfo per group (identifiers {(DOMAIN, key)}, name = group name)
   todo.py            one TodoListEntity per group, supported_features = 0 (read-only); items: uid = note id, summary = content (+ " · nextVariant" when set), due = date, status NEEDS_ACTION; sorted by due then content (same as widget)
-  sensor.py          due_today (count, due <= today), overdue (count, due < today), next_due (date), total (count)
+  sensor.py          due (count, due <= today: today or in the past), next_due (date), total (count)
   diagnostics.py     redact group key
   strings.json + translations/en.json, de.json
   icons.json

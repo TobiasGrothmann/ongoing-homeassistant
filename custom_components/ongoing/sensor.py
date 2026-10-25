@@ -44,12 +44,6 @@ SENSOR_DESCRIPTIONS: tuple[OngoingSensorEntityDescription, ...] = (
         notes_fn=lambda group, today: group.due_on_or_before(today),
     ),
     OngoingSensorEntityDescription(
-        key="overdue",
-        translation_key="overdue",
-        state_class=SensorStateClass.MEASUREMENT,
-        notes_fn=lambda group, today: group.due_before(today),
-    ),
-    OngoingSensorEntityDescription(
         key="next_due",
         translation_key="next_due",
         device_class=SensorDeviceClass.DATE,

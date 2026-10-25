@@ -37,9 +37,6 @@
       "due_date": {
         "name": "Due date"
       },
-      "overdue": {
-        "name": "Overdue"
-      },
       "next_due": {
         "name": "Next due"
       },

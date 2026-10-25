@@ -15,9 +15,6 @@
       "due_date": {
         "default": "mdi:calendar"
       },
-      "overdue": {
-        "default": "mdi:calendar-alert"
-      },
       "next_due": {
         "default": "mdi:calendar-arrow-right"
       },

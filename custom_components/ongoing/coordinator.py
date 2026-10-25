@@ -98,7 +98,7 @@ class OngoingCoordinator(DataUpdateCoordinator[OngoingGroup]):
         """
         registry = dr.async_get(self.hass)
         entry_id = self.config_entry.entry_id
-        registry.async_get_or_create(
+        list_device = registry.async_get_or_create(
             config_entry_id=entry_id,
             identifiers={(DOMAIN, self.group_key)},
             name=group.name,
@@ -112,7 +112,7 @@ class OngoingCoordinator(DataUpdateCoordinator[OngoingGroup]):
                 name=note.name,
                 model=note.interval,
                 manufacturer=MANUFACTURER,
-                via_device=(DOMAIN, self.group_key),
+                via_device_id=list_device.id,
             )
         current = {note.id for note in group.notes}
         for note_id in set(self.notes_by_id) - current:

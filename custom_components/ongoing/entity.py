@@ -46,14 +46,8 @@ class OngoingNoteEntity(CoordinatorEntity[OngoingCoordinator]):
         """Initialize the entity."""
         super().__init__(coordinator)
         self._note_id = note_id
-        note = self.note
-        self._attr_device_info = DeviceInfo(
-            identifiers={(DOMAIN, note_id)},
-            name=note.name,
-            manufacturer=MANUFACTURER,
-            model=note.interval,
-            via_device=(DOMAIN, coordinator.group_key),
-        )
+        # The coordinator creates the device, with the list as its parent.
+        self._attr_device_info = DeviceInfo(identifiers={(DOMAIN, note_id)})
 
     @property
     def note(self) -> OngoingNote:

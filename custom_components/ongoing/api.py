@@ -189,10 +189,6 @@ class OngoingGroup:
         """Notes due on `day` or earlier, what the app's widget shows."""
         return [note for note in self.notes if note.due <= day]
 
-    def due_before(self, day: date) -> list[OngoingNote]:
-        """Notes whose due date has passed."""
-        return [note for note in self.notes if note.due < day]
-
 
 class OngoingClient:
     """Reads one shared list from the endpoint."""

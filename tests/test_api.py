@@ -36,11 +36,10 @@ def test_parsing_sorts_and_skips_unreadable_notes() -> None:
 
 
 def test_due_selection() -> None:
-    """Due means today or earlier; overdue means strictly earlier."""
+    """Due means today or earlier."""
     group = fixture_group()
     today = date(2026, 10, 25)
     assert [n.id for n in group.due_on_or_before(today)] == ["note-plants", "note-bins"]
-    assert [n.id for n in group.due_before(today)] == ["note-plants"]
 
 
 @pytest.mark.parametrize(

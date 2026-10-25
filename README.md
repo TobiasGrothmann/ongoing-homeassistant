@@ -1,7 +1,7 @@
 # Ongoing for Home Assistant
 
 Shows a shared list of the [Ongoing](https://github.com/TobiasGrothmann/ongoing)
-app in Home Assistant: what is due, what is overdue, and the whole list as a
+app in Home Assistant: what is due (today or earlier) and the whole list as a
 to-do entity. Read-only for now.
 
 > Written with Claude Code, reviewed and tested by a human on one list.
@@ -12,7 +12,7 @@ to-do entity. Read-only for now.
 The app keeps shared lists in Firestore. A Cloud Function in the app's
 Firebase project (`groupNotes`) answers with the live notes of one list when
 asked with that list's group key. This integration polls that function every
-two minutes. Nothing but the group key ever leaves Home Assistant, and the key
+3½ minutes. Nothing but the group key ever leaves Home Assistant, and the key
 travels in a request header, never in a URL.
 
 The group key is the list's only credential, in the app as well: whoever has it
@@ -45,7 +45,6 @@ One service device per list with:
 |---|---|
 | `todo.<list>` | every note as an open item with its due date; the state is the note count |
 | `sensor.<list>_due` | notes due today or earlier, what the app's widget shows; the notes are in the `notes` attribute |
-| `sensor.<list>_overdue` | notes whose due date has passed, with the same attribute |
 | `sensor.<list>_next_due` | the earliest due date |
 | `sensor.<list>_notes` | all notes, with the same attribute |
 

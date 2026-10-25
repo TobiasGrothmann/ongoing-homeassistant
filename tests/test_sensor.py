@@ -38,12 +38,6 @@ async def test_sensors(
         "recurring": True,
     }
 
-    overdue = hass.states.get("sensor.haushalt_overdue")
-    assert overdue.state == "1"
-    assert [note["content"] for note in overdue.attributes["notes"]] == [
-        "Water the plants"
-    ]
-
     assert hass.states.get("sensor.haushalt_next_due").state == "2026-10-23"
     assert hass.states.get("sensor.haushalt_notes").state == "3"
 
@@ -58,18 +52,16 @@ async def test_counts_roll_over_at_midnight(
     mock_client: AsyncMock,
     freezer: FrozenDateTimeFactory,
 ) -> None:
-    """A note due tomorrow becomes due at midnight without new data."""
+    """The due count follows the calendar day without new data."""
+    # The taxes note is due on 30 Nov; start on the evening before.
+    freezer.move_to("2026-11-29 23:59:59-08:00")
     await setup_integration(hass, mock_config_entry)
-
-    freezer.tick(timedelta(hours=11, minutes=59, seconds=59))
-    async_fire_time_changed(hass)
-    await hass.async_block_till_done()
-    assert hass.states.get("sensor.haushalt_overdue").state == "1"
+    assert hass.states.get("sensor.haushalt_due").state == "2"
     polls = mock_client.async_fetch_group.await_count
 
     freezer.tick(timedelta(seconds=2))
     async_fire_time_changed(hass)
     await hass.async_block_till_done()
 
-    assert hass.states.get("sensor.haushalt_overdue").state == "2"
+    assert hass.states.get("sensor.haushalt_due").state == "3"
     assert mock_client.async_fetch_group.await_count == polls

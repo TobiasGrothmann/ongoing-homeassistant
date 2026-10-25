@@ -37,9 +37,6 @@
       "due_date": {
         "name": "Fälligkeitsdatum"
       },
-      "overdue": {
-        "name": "Überfällig"
-      },
       "next_due": {
         "name": "Nächste Fälligkeit"
       },
