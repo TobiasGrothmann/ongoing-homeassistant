@@ -49,8 +49,23 @@ One service device per list with:
 | `sensor.<list>_next_due` | the earliest due date |
 | `sensor.<list>_notes` | all notes, with the same attribute |
 
-The `notes` attribute is a list of `{content, variant, due, recurring}`, so a
-template can render the due notes:
+And one device per note, under the list, named after the note's text, with
+the interval as its model ("once", "every week", "every 2 weeks"). A note
+device can be assigned to an area like any other device.
+
+| Entity | Meaning |
+|---|---|
+| `binary_sensor.<note>` | on when the note is due today or earlier |
+| `sensor.<note>_due_date` | the day it is due |
+
+The binary sensor's attributes carry the rest: `content`, `recurring`,
+`interval`, `interval_number`, `interval_unit`, `due`, `days_until_due`
+(negative when overdue), `last_done`, `next_variant`, `note_id`, `list`.
+Notes added in the app appear on the next poll, deleted ones disappear with
+their device, an edited text renames the device and keeps the entity id.
+
+The list sensors' `notes` attribute is a list of `{content, variant, due,
+recurring}`, so a template can render the due notes:
 
 ```jinja
 {% for note in state_attr('sensor.haushalt_due', 'notes') %}

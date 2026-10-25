@@ -13,13 +13,13 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
 from .api import OngoingGroup, OngoingNote
 from .coordinator import OngoingConfigEntry, OngoingCoordinator
-from .entity import OngoingEntity
+from .entity import OngoingEntity, OngoingNoteEntity
 
 PARALLEL_UPDATES = 0
 
@@ -78,11 +78,27 @@ async def async_setup_entry(
     entry: OngoingConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Set up the sensors for a shared list."""
+    """Set up the list sensors and one due-date sensor per note."""
     coordinator = entry.runtime_data
     async_add_entities(
         OngoingSensor(coordinator, description) for description in SENSOR_DESCRIPTIONS
     )
+
+    known: set[str] = set()
+
+    @callback
+    def _async_add_new_notes() -> None:
+        current = set(coordinator.notes_by_id)
+        known.intersection_update(current)
+        new = current - known
+        if new:
+            async_add_entities(
+                OngoingNoteDueDate(coordinator, note_id) for note_id in new
+            )
+            known.update(new)
+
+    entry.async_on_unload(coordinator.async_add_listener(_async_add_new_notes))
+    _async_add_new_notes()
 
 
 class OngoingSensor(OngoingEntity, SensorEntity):
@@ -120,3 +136,21 @@ class OngoingSensor(OngoingEntity, SensorEntity):
             self.group_data, self.coordinator.today()
         )
         return {"notes": [_note_attributes(note) for note in notes]}
+
+
+class OngoingNoteDueDate(OngoingNoteEntity, SensorEntity):
+    """The day a note is due."""
+
+    _attr_translation_key = "due_date"
+    _attr_device_class = SensorDeviceClass.DATE
+
+    def __init__(self, coordinator: OngoingCoordinator, note_id: str) -> None:
+        """Initialize the due-date sensor."""
+        super().__init__(coordinator, note_id)
+        self._attr_unique_id = f"{note_id}_due_date"
+
+    @property
+    @override
+    def native_value(self) -> date:
+        """Return the due date."""
+        return self.note.due

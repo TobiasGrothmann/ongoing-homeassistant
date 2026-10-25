@@ -70,3 +70,16 @@ README: why, install (HACS custom repo + manual), setup (group key from the app'
 ## Later (not in v1)
 - `completeNote` function with HLC stamping (clock node `ha-<uuid>`), todo `update_item` → "did it".
 - Push to HA via webhook from `onNoteChange` if polling ever feels slow.
+
+---
+
+# Phase 2 — one device per note (decided 2026-10-25)
+
+Why devices: a device can be assigned to an area and pinned on dashboards; "did it" from HA is dropped, read-only stays.
+
+- **Device per note**, identifiers `(ongoing, <note id>)`, `via_device` the list device, name = note text, model = the interval ("once", "every week", "every 2 weeks"). Created, renamed and removed by the coordinator on every poll; the list device is created there too so `via_device` resolves.
+- **Two entities per note**, unique ids `<note id>_due` and `<note id>_due_date`:
+  - `binary_sensor.<note>`: on when due today or earlier. Attributes: `content`, `recurring`, `interval`, `interval_number`, `interval_unit`, `due`, `days_until_due` (negative when overdue), `last_done`, `next_variant`, `note_id`, `list`.
+  - `sensor.<note>_due_date`: device class date.
+- Entities for new notes are added by a coordinator listener; removing the device removes its entities. Content edits rename the device, the entity id stays.
+- Display is decided later: a dashboard with all notes, chosen notes on the TRMNL, notes mapped to areas. The list-level entities from phase 1 stay.

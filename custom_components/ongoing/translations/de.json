@@ -25,9 +25,17 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "due": {
+        "name": "Fällig"
+      }
+    },
     "sensor": {
       "due": {
         "name": "Fällig"
+      },
+      "due_date": {
+        "name": "Fälligkeitsdatum"
       },
       "overdue": {
         "name": "Überfällig"

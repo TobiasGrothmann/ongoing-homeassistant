@@ -5,7 +5,7 @@ from homeassistant.core import HomeAssistant
 
 from .coordinator import OngoingConfigEntry, OngoingCoordinator
 
-PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.TODO]
+PLATFORMS: list[Platform] = [Platform.BINARY_SENSOR, Platform.SENSOR, Platform.TODO]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: OngoingConfigEntry) -> bool:

@@ -10,12 +10,19 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.device_registry import DeviceEntryType
 from homeassistant.helpers.event import async_track_time_change
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 
-from .api import OngoingAuthenticationError, OngoingClient, OngoingError, OngoingGroup
-from .const import CONF_GROUP_KEY, DEFAULT_SCAN_INTERVAL, DOMAIN, LOGGER
+from .api import (
+    OngoingAuthenticationError,
+    OngoingClient,
+    OngoingError,
+    OngoingGroup,
+    OngoingNote,
+)
+from .const import CONF_GROUP_KEY, DEFAULT_SCAN_INTERVAL, DOMAIN, LOGGER, MANUFACTURER
 
 type OngoingConfigEntry = ConfigEntry[OngoingCoordinator]
 
@@ -37,6 +44,7 @@ class OngoingCoordinator(DataUpdateCoordinator[OngoingGroup]):
         self.client = OngoingClient(
             config_entry.data[CONF_GROUP_KEY], async_get_clientsession(hass)
         )
+        self.notes_by_id: dict[str, OngoingNote] = {}
         # Due counts depend on the calendar day, so entities must refresh at
         # midnight even when no note changed.
         config_entry.async_on_unload(
@@ -74,14 +82,41 @@ class OngoingCoordinator(DataUpdateCoordinator[OngoingGroup]):
             ) from err
 
         if self.data is not None and group.name != self.data.name:
-            self._rename(group.name)
+            self.hass.config_entries.async_update_entry(
+                self.config_entry, title=group.name
+            )
+        self._sync_devices(group)
+        self.notes_by_id = {note.id: note for note in group.notes}
         return group
 
-    def _rename(self, name: str) -> None:
-        """Follow a group rename in the app."""
-        self.hass.config_entries.async_update_entry(self.config_entry, title=name)
+    def _sync_devices(self, group: OngoingGroup) -> None:
+        """One device for the list and one per note, kept in step with the app.
+
+        The registry call updates name and model of a device that exists, so a
+        note edited in the app is renamed here; a note that vanished is
+        removed together with its entities.
+        """
         registry = dr.async_get(self.hass)
-        if device := registry.async_get_device_by_identifier(
-            (DOMAIN, self.group_key), self.config_entry.entry_id
-        ):
-            registry.async_update_device(device.id, name=name)
+        entry_id = self.config_entry.entry_id
+        registry.async_get_or_create(
+            config_entry_id=entry_id,
+            identifiers={(DOMAIN, self.group_key)},
+            name=group.name,
+            manufacturer=MANUFACTURER,
+            entry_type=DeviceEntryType.SERVICE,
+        )
+        for note in group.notes:
+            registry.async_get_or_create(
+                config_entry_id=entry_id,
+                identifiers={(DOMAIN, note.id)},
+                name=note.name,
+                model=note.interval,
+                manufacturer=MANUFACTURER,
+                via_device=(DOMAIN, self.group_key),
+            )
+        current = {note.id for note in group.notes}
+        for note_id in set(self.notes_by_id) - current:
+            if device := registry.async_get_device_by_identifier(
+                (DOMAIN, note_id), entry_id
+            ):
+                registry.async_remove_device(device.id)

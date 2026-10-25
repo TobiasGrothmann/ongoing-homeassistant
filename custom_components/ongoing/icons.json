@@ -1,8 +1,19 @@
 {
   "entity": {
+    "binary_sensor": {
+      "due": {
+        "default": "mdi:calendar-check",
+        "state": {
+          "on": "mdi:calendar-alert"
+        }
+      }
+    },
     "sensor": {
       "due": {
         "default": "mdi:calendar-today"
+      },
+      "due_date": {
+        "default": "mdi:calendar"
       },
       "overdue": {
         "default": "mdi:calendar-alert"

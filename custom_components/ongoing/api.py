@@ -87,6 +87,9 @@ def _as_str(value: Any) -> str | None:
     return text or None
 
 
+_UNIT_SINGULAR = {"days": "day", "weeks": "week", "months": "month"}
+
+
 @dataclass(frozen=True, kw_only=True)
 class OngoingNote:
     """A note of a shared list."""
@@ -122,11 +125,31 @@ class OngoingNote:
         )
 
     @property
+    def name(self) -> str:
+        """The content, or a stand-in for an empty note."""
+        return self.content or f"Note {self.id[:8]}"
+
+    @property
     def title(self) -> str:
-        """The content, followed by the variant that is up next."""
+        """The name, followed by the variant that is up next."""
         if self.next_variant:
-            return f"{self.content} · {self.next_variant}"
-        return self.content
+            return f"{self.name} · {self.next_variant}"
+        return self.name
+
+    @property
+    def interval(self) -> str:
+        """How the note repeats: "once", "every week", "every 2 weeks"."""
+        if not self.is_recurring:
+            return "once"
+        number = self.duration_number or 1
+        unit = self.duration_type or "days"
+        if number == 1:
+            return f"every {_UNIT_SINGULAR.get(unit, unit)}"
+        return f"every {number} {unit}"
+
+    def days_until_due(self, today: date) -> int:
+        """Calendar days until due; negative when overdue."""
+        return (self.due - today).days
 
 
 @dataclass(frozen=True, kw_only=True)

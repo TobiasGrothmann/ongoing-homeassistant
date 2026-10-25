@@ -25,9 +25,17 @@
     }
   },
   "entity": {
+    "binary_sensor": {
+      "due": {
+        "name": "Due"
+      }
+    },
     "sensor": {
       "due": {
         "name": "Due"
+      },
+      "due_date": {
+        "name": "Due date"
       },
       "overdue": {
         "name": "Overdue"
